@@ -1,25 +1,35 @@
-# CA-HepTh 合作网络实验复现
+# 基于 TuGraph 的 CA-HepTh 合作网络分析
 
-可用浏览器打开 report.html 查看报告网页。用 A4、无页眉页脚、打印背景设置可另存 PDF。
+[在线报告](https://qcld000.github.io/tugraph-ca-hepth/) · [提交用 PDF](report.pdf) · [离线复现包](reproduction.zip)
 
-## 环境与运行
+使用 Stanford SNAP 的 [CA-HepTh 数据集](https://snap.stanford.edu/data/ca-HepTh.html)，将 51,971 条原始边表记录清洗为 9,877 个作者节点和 25,973 条无向合作边。TuGraph 负责图库导入、导出与结果持久化。Python 在导出的实库图数据上执行 PageRank 和 32 维谱嵌入，并进行三轮留出边评估。
 
-实测 TuGraph 4.5.2、WSL 2（Ubuntu 24.04）、NumPy 2.1.3、SciPy 1.15.3、scikit-learn 1.6.1。在本目录操作，使用尚不存在的图库目录。Python 可在 Windows 或 Linux 运行。TuGraph 命令在 Linux 或 WSL 运行，按安装位置设置共享库路径。旧版二进制在 Ubuntu 24.04 上可能需要提供 libgfortran.so.4 的兼容运行库。
+## 项目文件
+
+| 文件 | 用途 |
+| --- | --- |
+| [prepare.py](project/prepare.py) | 清洗原始边表、生成 CSV 和导入配置 |
+| [analyze.py](project/analyze.py) | 构造无向邻接矩阵、计算 PageRank 与谱嵌入 |
+| [evaluate.py](project/evaluate.py) | 验证 16、32、64 维嵌入，对照共同邻居与 Jaccard |
+| [verify.py](project/verify.py) | 校验结果库中的作者、合作边、分数与向量 |
+| [report.py](project/report.py) | 从运行结果生成实验报告网页 |
+| [config/](project/config/) | 实测所用的两阶段 TuGraph 导入配置 |
+| [data/](project/data/) | 原始 SNAP 压缩边表 |
+| [results/](project/results/) | 实测指标、全量节点结果和导入导出日志 |
+
+## 复现完整流程
+
+在 Linux 或 WSL 中准备 TuGraph 4.5.2 与 Python。确保 `lgraph_import`、`lgraph_export` 在 PATH 中。按 TuGraph 安装位置配置动态库搜索路径，旧版二进制在 Ubuntu 24.04 上可能还需要 `libgfortran.so.4` 兼容库。
 
 ```bash
-export LD_LIBRARY_PATH=/usr/local/lib64/lgraph:/opt/tugraph-homework/compat/usr/lib/x86_64-linux-gnu
-python prepare.py
-lgraph_import -c import.json -d hep-db
-lgraph_export -d hep-db -e db-export -u admin -p 73@TuGraph > export-check.log
-python analyze.py
-lgraph_import -c enriched.json -d hep-results
-lgraph_export -d hep-results -e db-results -u admin -p 73@TuGraph
-python verify.py
-python evaluate.py
-python report.py
+git clone https://github.com/qcld000/tugraph-ca-hepth.git
+cd tugraph-ca-hepth
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r project/requirements.txt
+bash project/run.sh
 ```
 
-Python 依赖可用 pip install numpy scipy scikit-learn 安装。离线导出使用独立实验库的默认账号。
+也可传入一个尚不存在的目录，例如 `bash project/run.sh ./experiment-01`。脚本在该目录生成源图库 `hep-db`、结果图库 `hep-results`、全量 `scores.tsv`、评估指标及报告网页。复现脚本会自动重新生成两份导入配置，以匹配本轮生成的数据文件。
 
-数据来自 https://snap.stanford.edu/data/ca-HepTh.html 。results.json 为报告统计，三个导入导出阶段及核验的日志保存在包内。scores.tsv 的各列为作者编号、PageRank 和逗号分隔的节点向量。
-
+GitHub Pages 托管报告、PDF 和复现包。TuGraph 实验由仓库中的复现脚本在 Linux 或 WSL 中运行。

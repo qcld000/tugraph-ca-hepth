@@ -1,0 +1,58 @@
+{
+  "schema": [
+    {
+      "label": "Author",
+      "type": "VERTEX",
+      "primary": "id",
+      "properties": [
+        {
+          "name": "id",
+          "type": "INT64"
+        },
+        {
+          "name": "pagerank",
+          "type": "DOUBLE",
+          "optional": true
+        },
+        {
+          "name": "embedding",
+          "type": "STRING",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "label": "COAUTHOR",
+      "type": "EDGE",
+      "constraints": [
+        [
+          "Author",
+          "Author"
+        ]
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "authors-enriched.csv",
+      "format": "CSV",
+      "label": "Author",
+      "columns": [
+        "id",
+        "pagerank",
+        "embedding"
+      ]
+    },
+    {
+      "path": "coauthors.csv",
+      "format": "CSV",
+      "label": "COAUTHOR",
+      "SRC_ID": "Author",
+      "DST_ID": "Author",
+      "columns": [
+        "SRC_ID",
+        "DST_ID"
+      ]
+    }
+  ]
+}

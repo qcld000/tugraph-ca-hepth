@@ -1,0 +1,12 @@
+DB directory has been found.
+Export directory does not exist, creating...
+Export directory has been created, now exporting...
+From dir:        hep-results
+From graph:      default
+To dir:          db-results
+Field separator: ,
+Format:          csv
+Loading DB state from disk
+100% complete. Dumped 9877 vertexes and 25973 edges.
+Config file generated in [db-results/import.config]
+Export successful in 0.92328 seconds.

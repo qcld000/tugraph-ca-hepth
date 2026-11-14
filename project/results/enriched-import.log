@@ -1,0 +1,20 @@
+[20261114 12:12:26.451212 0x0000724882b14ac0 INFO  toolkits/lgraph_import.cpp:307] Importing FROM SCRATCH:   
+	from:                 enriched.json
+	to:                   hep-results
+	verbose:              1
+	log_dir:              
+	keep_vid_in_memory:   true
+	parse_file_threads:   4
+	parse_block_threads:  4
+	parse_block_size:     8388608
+	generate_sst_threads: 12
+	read_rocksdb_threads: 12
+	vid_num_per_reading:  10000
+	max_size_per_reading: 33554432
+[20261114 12:12:26.556722 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:107] Add vertex label:Author
+[20261114 12:12:26.558463 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:107] Add edge label:COAUTHOR
+[20261114 12:12:26.727012 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:512] Convert vertex data to sst files, time: 0.164708s
+[20261114 12:12:26.840653 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:877] Convert edge data to sst files, time: 0.112847s
+[20261114 12:12:26.879337 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:1034] Write vertex primary index to lmdb, time: 0.0342178s
+[20261114 12:12:27.640254 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:1410] Dump rocksdb into lmdb, time: 0.76042s
+[20261114 12:12:27.690070 0x0000724882b14ac0 INFO  src/import/import_v3.cpp:216] Import finished in 1.22671 seconds.
